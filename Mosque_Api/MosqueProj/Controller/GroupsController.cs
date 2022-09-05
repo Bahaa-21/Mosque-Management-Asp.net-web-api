@@ -29,9 +29,9 @@ namespace MosqueProj.Controller
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetGroups()
+        public async Task<IActionResult> GetGroups([FromQuery] RequestParams requestParams)
         {
-            var groups = await _unitOfWork.Groups.GetAll(g => g.YearId > 0);
+            var groups = await _unitOfWork.Groups.GetAll(requestParams);
 
             var results = _mapper.Map<IList<GroupDTO>>(groups);
             return Ok(results);

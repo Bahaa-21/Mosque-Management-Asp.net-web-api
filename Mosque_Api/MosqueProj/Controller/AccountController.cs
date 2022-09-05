@@ -41,33 +41,26 @@ namespace MosqueProj.Controller
             {
                 return BadRequest(ModelState);
             }
-            try
+
+            if (await _userManager.FindByEmailAsync(userDOT.Email) is not null)
+                return BadRequest();
+
+            var user = _mapper.Map<ApiUsers>(userDOT);
+
+            user.UserName = userDOT.Email;
+
+            var result = await _userManager.CreateAsync(user, userDOT.Password);
+            if (!result.Succeeded)
             {
-                if (await _userManager.FindByEmailAsync(userDOT.Email) is not null)
-                    return BadRequest();
-
-
-                var user = _mapper.Map<ApiUsers>(userDOT);
-
-                user.UserName = userDOT.Email;
-
-                var result = await _userManager.CreateAsync(user,userDOT.Password);
-                if (!result.Succeeded)
+                foreach (var error in result.Errors)
                 {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(error.Code, error.Description);
-                    }
-                    return BadRequest(ModelState);
+                    ModelState.AddModelError(error.Code, error.Description);
                 }
-                
-                await _userManager.AddToRolesAsync(user , userDOT.Roles);
-                return Accepted();
+                return BadRequest(ModelState);
             }
-            catch (Exception)
-            {
-                return Problem($"Something Went wrong in the : {nameof(Register)}", statusCode: 500);
-            }
+
+            await _userManager.AddToRolesAsync(user, userDOT.Roles);
+            return Accepted();
         }
 
 
@@ -82,13 +75,12 @@ namespace MosqueProj.Controller
             {
                 return BadRequest(ModelState);
             }
-            
-                if (!await _authManager.ValidateUser(loingUser))
-                {
-                    return Unauthorized();
-                }
+            if (!await _authManager.ValidateUser(loingUser))
+            {
+                return Unauthorized();
+            }
 
-                return Ok(new { token = _authManager.CreateToken()});
+            return Ok(new { token = _authManager.CreateToken() });
         }
     }
 }

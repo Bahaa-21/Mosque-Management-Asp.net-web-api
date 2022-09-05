@@ -1,11 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MosqueProj.Data;
 using MosqueProj.IReprository;
+using MosqueProj.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace MosqueProj.Repository
 {
@@ -66,6 +68,20 @@ namespace MosqueProj.Repository
             }
 
             return await query.AsNoTracking().ToListAsync();
+        }
+
+        public async Task<IPagedList<T>> GetAll(RequestParams requestParams = null, string[] includes = null)
+        {
+            IQueryable<T> query = _db;
+
+            if (includes != null)
+            {
+                foreach (var item in includes)
+                {
+                    query = query.Include(item);
+                }
+            }
+            return await query.AsNoTracking().ToPagedListAsync(requestParams.PageNumber,requestParams.PageSize);
         }
 
         public async Task Insert(T entity) => await _db.AddAsync(entity);

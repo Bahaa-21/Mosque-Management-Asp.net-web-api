@@ -1,17 +1,19 @@
-﻿using System;
+﻿using MosqueProj.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace MosqueProj.IReprository
 {
     public interface IGenericRepository<T>  where T : class
     {
-        Task<IList<T>> GetAll(Expression<Func<T , bool>> expression =null,
+        Task<IList<T>> GetAll(Expression<Func<T , bool>> expression = null,
             Func<IQueryable<T> , IOrderedQueryable<T>> orderBy = null,
             string[] includes = null);
-
+        Task<IPagedList<T>> GetAll (RequestParams requestParams = null , string[] includes = null);
 
         Task<T> Get(Expression<Func<T, bool>> expression = null,
            string[] includes = null  );

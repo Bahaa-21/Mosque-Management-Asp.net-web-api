@@ -28,7 +28,7 @@ namespace MosqueProj.Controller
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetStudents()
         {
-            var students = await _unitOfWork.Students.GetAll();
+            var students = await _unitOfWork.Students.GetAll(expression: null);
             var result = _mapper.Map<IList<StudentDTO>>(students);
             return Ok(result);
         }
