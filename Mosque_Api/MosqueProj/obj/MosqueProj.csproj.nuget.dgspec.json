@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\My-Git\\Mosque-Project\\Mosque_Api\\MosqueProj\\MosqueProj.csproj": {}
+    "C:\\Users\\User\\Desktop\\My-Git\\Mosque-Project\\Mosque_Api\\MosqueProj\\MosqueProj.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\My-Git\\Mosque-Project\\Mosque_Api\\MosqueProj\\MosqueProj.csproj": {
+    "C:\\Users\\User\\Desktop\\My-Git\\Mosque-Project\\Mosque_Api\\MosqueProj\\MosqueProj.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\My-Git\\Mosque-Project\\Mosque_Api\\MosqueProj\\MosqueProj.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\My-Git\\Mosque-Project\\Mosque_Api\\MosqueProj\\MosqueProj.csproj",
         "projectName": "MosqueProj",
-        "projectPath": "C:\\Users\\User\\My-Git\\Mosque-Project\\Mosque_Api\\MosqueProj\\MosqueProj.csproj",
+        "projectPath": "C:\\Users\\User\\Desktop\\My-Git\\Mosque-Project\\Mosque_Api\\MosqueProj\\MosqueProj.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\My-Git\\Mosque-Project\\Mosque_Api\\MosqueProj\\obj\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\My-Git\\Mosque-Project\\Mosque_Api\\MosqueProj\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",

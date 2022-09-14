@@ -29,7 +29,6 @@ namespace MosqueProj.Controller
         }
 
 
-
         [HttpPost]
         [Route("register")]
         [ProducesResponseType(StatusCodes.Status202Accepted)]

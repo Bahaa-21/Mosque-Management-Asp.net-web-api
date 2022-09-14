@@ -14,7 +14,7 @@ namespace MosqueProj.Entities
         public int? YearId { get; set; }
         public int TeacherId { get; set; }
         [ForeignKey("TeacherId")]
-        public Teacher Teachers { get; set; }
+        public virtual Teacher Teachers { get; set; }
 
         public virtual IList<Student> Students { get; set; }
 

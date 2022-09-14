@@ -13,11 +13,6 @@ namespace MosqueProj.Data
         {
             base.OnModelCreating(modelBuilder);
 
-
-            modelBuilder.Entity<Student>()
-            .Property(p => p.Full_Name).HasComputedColumnSql("[First_Name] + ' ' + [Father_Name] + ' ' + [Last_Name]");
-
-
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
         }
         

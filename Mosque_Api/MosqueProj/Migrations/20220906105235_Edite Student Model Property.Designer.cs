@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MosqueProj.Data;
 
 namespace MosqueProj.Migrations
 {
     [DbContext(typeof(MosqueDbContext))]
-    partial class MosqueDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220906105235_Edite Student Model Property")]
+    partial class EditeStudentModelProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

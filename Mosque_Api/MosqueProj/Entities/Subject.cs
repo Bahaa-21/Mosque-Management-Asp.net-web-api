@@ -7,7 +7,6 @@ namespace MosqueProj.Entities
     {
         public int Id { get; set; }
         public string Name_Subject { get; set; }
-
         public List<Teacher> Teachers { get; set; }
     }
 }

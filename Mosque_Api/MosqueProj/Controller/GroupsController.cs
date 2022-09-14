@@ -34,6 +34,7 @@ namespace MosqueProj.Controller
             var groups = await _unitOfWork.Groups.GetAll(requestParams);
 
             var results = _mapper.Map<IList<GroupDTO>>(groups);
+
             return Ok(results);
         }
 
