@@ -1,75 +1,69 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MosqueProj.Data;
-using MosqueProj.Entities;
-using MosqueProj.Model;
-using System;
 using System.Text;
 
-namespace MosqueProj
+namespace MosqueProj;
+
+public static class ServiceExtensions
 {
-    public static class ServiceExtensions
+    public static void ConfigureIdentity(this IServiceCollection services)
     {
-        public static void ConfigureIdentity(this IServiceCollection services)
-        {
-            var builder = services.AddIdentityCore<ApiUsers>(q =>
-                { 
-                q.User.RequireUniqueEmail = true ;
-                q.Password.RequiredUniqueChars = 1 ;
-                q.Password.RequireUppercase = false;
-                });
-
-            builder = new IdentityBuilder(builder.UserType , typeof(IdentityRole) , services);
-            builder.AddEntityFrameworkStores<MosqueDbContext>().AddDefaultTokenProviders();
-        }
-
-        public static void ConfigureJwt(this IServiceCollection services , IConfiguration configuration)
-        {
-            var jwtSettings = configuration.GetSection("JWT");
-
-            var key = Environment.GetEnvironmentVariable("KEY");
-
-            services.AddAuthentication(o =>
-            {
-                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(o =>
-            {
-                o.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtSettings.GetSection("Issuer").Value,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
-                };
+        var builder = services.AddIdentityCore<ApiUsers>(q =>
+            { 
+            q.User.RequireUniqueEmail = true ;
+            q.Password.RequiredUniqueChars = 1 ;
+            q.Password.RequireUppercase = false;
             });
-        }
 
-        public static void ConfigureExceptionHandler(this IApplicationBuilder app)
+        builder = new IdentityBuilder(builder.UserType , typeof(IdentityRole) , services);
+        builder.AddEntityFrameworkStores<MosqueDbContext>().AddDefaultTokenProviders();
+    }
+
+    public static void ConfigureJwt(this IServiceCollection services , IConfiguration configuration)
+    {
+        var jwtSettings = configuration.GetSection("JWT");
+
+        var key = Environment.GetEnvironmentVariable("KEY");
+
+        services.AddAuthentication(o =>
         {
-            app.UseExceptionHandler(error => {
-                error.Run(async context => 
+            o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(o =>
+        {
+            o.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSettings.GetSection("Issuer").Value,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)),
+            };
+        });
+    }
+
+    public static void ConfigureExceptionHandler(this IApplicationBuilder app)
+    {
+        app.UseExceptionHandler(error => {
+            error.Run(async context => 
+            {
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                context.Response.ContentType = "application/json";
+                var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                if (contextFeature != null)
                 {
-                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-                    context.Response.ContentType = "application/json";
-                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
-                    if (contextFeature != null)
+                    await context.Response.WriteAsync(new Error
                     {
-                        await context.Response.WriteAsync(new Error
-                        {
-                            StatusCode = context.Response.StatusCode,
-                            Message = "Internal Server Error , Please Try agin"
-                        }.ToString());
-                    }
-                });
+                        StatusCode = context.Response.StatusCode,
+                        Message = "Internal Server Error , Please Try agin"
+                    }.ToString());
+                }
             });
-        }
+        });
     }
 }

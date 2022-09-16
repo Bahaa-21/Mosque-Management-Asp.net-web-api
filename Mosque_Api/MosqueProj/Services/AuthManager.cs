@@ -1,82 +1,75 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using MosqueProj.Entities;
-using MosqueProj.Model;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace MosqueProj.Services
+namespace MosqueProj.Services;
+
+public class AuthManager : IAuthManager
 {
-    public class AuthManager : IAuthManager
+    private readonly UserManager<ApiUsers> _userManager;
+    private readonly IConfiguration _configuration;
+    private ApiUsers _user;
+
+    public AuthManager(UserManager<ApiUsers> userManager , IConfiguration configuration)
     {
-        private readonly UserManager<ApiUsers> _userManager;
-        private readonly IConfiguration _configuration;
-        private ApiUsers _user;
+        _userManager = userManager;
+        _configuration = configuration;
+    }
+    
+    public async Task<string> CreateToken()
+    {
+        var signingCredentials = GetSigningCredentials();
+        var claims = await GetClaims();
+        var token = GenerateTokenOptions(signingCredentials, claims);
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
 
-        public AuthManager(UserManager<ApiUsers> userManager , IConfiguration configuration)
+    private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
+    {
+        var jwtSettings = _configuration.GetSection("JWT");
+        var expiration = DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("lifetime").Value));
+
+        var token = new JwtSecurityToken(
+            issuer : jwtSettings.GetSection("Issurer").Value,
+            claims: claims,
+            expires: expiration,
+            signingCredentials: signingCredentials
+            );
+        return token;
+    }
+
+    private async Task<List<Claim>> GetClaims()
+    {
+        var claims = new List<Claim>
+        { 
+            new Claim(ClaimTypes.Name, _user.UserName),
+        };
+
+        var roles = await _userManager.GetRolesAsync(_user);
+
+        foreach(var role in roles)
         {
-            _userManager = userManager;
-            _configuration = configuration;
-        }
-        
-        public async Task<string> CreateToken()
-        {
-            var signingCredentials = GetSigningCredentials();
-            var claims = await GetClaims();
-            var token = GenerateTokenOptions(signingCredentials, claims);
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        private JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
-        {
-            var jwtSettings = _configuration.GetSection("JWT");
-            var expiration = DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("lifetime").Value));
-
-            var token = new JwtSecurityToken(
-                issuer : jwtSettings.GetSection("Issurer").Value,
-                claims: claims,
-                expires: expiration,
-                signingCredentials: signingCredentials
-                );
-            return token;
-        }
-
-        private async Task<List<Claim>> GetClaims()
-        {
-            var claims = new List<Claim>
-            { 
-                new Claim(ClaimTypes.Name, _user.UserName),
-            };
-
-            var roles = await _userManager.GetRolesAsync(_user);
-
-            foreach(var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
-
-            return claims;
+            claims.Add(new Claim(ClaimTypes.Role, role));
         }
 
-        private SigningCredentials GetSigningCredentials()
-        {
-            var key = Environment.GetEnvironmentVariable("KEY");
+        return claims;
+    }
 
-            var secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+    private SigningCredentials GetSigningCredentials()
+    {
+        var key = Environment.GetEnvironmentVariable("KEY");
 
-            return new SigningCredentials(secret , SecurityAlgorithms.HmacSha256);
-        }
+        var secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
-        public async Task<bool> ValidateUser(LoingUserDTO userDTO)
-        {
-            _user = await _userManager.FindByNameAsync(userDTO.Email);
+        return new SigningCredentials(secret , SecurityAlgorithms.HmacSha256);
+    }
 
-            return (_user != null && await _userManager.CheckPasswordAsync(_user, userDTO.Password));
-        }
+    public async Task<bool> ValidateUser(LoingUserDTO userDTO)
+    {
+        _user = await _userManager.FindByNameAsync(userDTO.Email);
+
+        return (_user != null && await _userManager.CheckPasswordAsync(_user, userDTO.Password));
     }
 }

@@ -1,11 +1,7 @@
-﻿using MosqueProj.Model;
-using System.Threading.Tasks;
+﻿namespace MosqueProj.Services;
 
-namespace MosqueProj.Services
+public interface IAuthManager
 {
-    public interface IAuthManager
-    {
-        Task<bool> ValidateUser(LoingUserDTO userDTO);
-        Task<string> CreateToken();
-    }
+    Task<bool> ValidateUser(LoingUserDTO userDTO);
+    Task<string> CreateToken();
 }

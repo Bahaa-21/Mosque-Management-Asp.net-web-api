@@ -1,85 +1,70 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using MosqueProj.Entities;
-using MosqueProj.Model;
-using MosqueProj.Services;
-using System;
-using System.Threading.Tasks;
+﻿namespace MosqueProj.Controller;
 
-namespace MosqueProj.Controller
+[Route("api/[controller]")]
+[ApiController]
+public class AccountController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AccountController : ControllerBase
+    private readonly UserManager<ApiUsers> _userManager;
+    private readonly IMapper _mapper;
+    private readonly IAuthManager _authManager;
+
+
+
+    public AccountController(UserManager<ApiUsers> userManager, IMapper mapper, IAuthManager authManager) =>
+
+        (_userManager, _mapper, _authManager) = (userManager, mapper, authManager);
+
+
+    [HttpPost]
+    [Route("register")]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Register([FromBody] UserDTO userDOT)
     {
-        private readonly UserManager<ApiUsers> _userManager;
-        private readonly IMapper _mapper;
-        private readonly IAuthManager _authManager;
-        
-
-
-        public AccountController(UserManager<ApiUsers> userManager, IMapper mapper , IAuthManager authManager)
+        if (!ModelState.IsValid)
         {
-            _userManager = userManager;
-            _mapper = mapper;
-            _authManager = authManager;
+            return BadRequest(ModelState);
         }
 
+        if (await _userManager.FindByEmailAsync(userDOT.Email) is not null)
+            return BadRequest();
 
-        [HttpPost]
-        [Route("register")]
-        [ProducesResponseType(StatusCodes.Status202Accepted)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Register([FromBody] UserDTO userDOT)
+        var user = _mapper.Map<ApiUsers>(userDOT);
+
+        user.UserName = userDOT.Email;
+
+        var result = await _userManager.CreateAsync(user, userDOT.Password);
+        if (!result.Succeeded)
         {
-            if (!ModelState.IsValid)
+            foreach (var error in result.Errors)
             {
-                return BadRequest(ModelState);
+                ModelState.AddModelError(error.Code, error.Description);
             }
-
-            if (await _userManager.FindByEmailAsync(userDOT.Email) is not null)
-                return BadRequest();
-
-            var user = _mapper.Map<ApiUsers>(userDOT);
-
-            user.UserName = userDOT.Email;
-
-            var result = await _userManager.CreateAsync(user, userDOT.Password);
-            if (!result.Succeeded)
-            {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.Code, error.Description);
-                }
-                return BadRequest(ModelState);
-            }
-
-            await _userManager.AddToRolesAsync(user, userDOT.Roles);
-            return Accepted();
+            return BadRequest(ModelState);
         }
 
+        await _userManager.AddToRolesAsync(user, userDOT.Roles);
+        return Accepted();
+    }
 
-        [HttpPost]
-        [Route("login")]
-        [ProducesResponseType(StatusCodes.Status202Accepted)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Login([FromBody] LoingUserDTO loingUser)
+
+    [HttpPost]
+    [Route("login")]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Login([FromBody] LoingUserDTO loingUser)
+    {
+        if (!ModelState.IsValid)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            if (!await _authManager.ValidateUser(loingUser))
-            {
-                return Unauthorized();
-            }
-
-            return Ok(new { token = _authManager.CreateToken() });
+            return BadRequest(ModelState);
         }
+        if (!await _authManager.ValidateUser(loingUser))
+        {
+            return Unauthorized();
+        }
+
+        return Ok(new { token = _authManager.CreateToken() });
     }
 }
