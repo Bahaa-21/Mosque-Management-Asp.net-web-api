@@ -8,11 +8,11 @@ namespace MosqueProj.Services;
 
 public class AuthManager : IAuthManager
 {
-    private readonly UserManager<ApiUsers> _userManager;
+    private readonly UserManager<Users> _userManager;
     private readonly IConfiguration _configuration;
-    private ApiUsers _user;
+    private Users _user;
 
-    public AuthManager(UserManager<ApiUsers> userManager , IConfiguration configuration)
+    public AuthManager(UserManager<Users> userManager , IConfiguration configuration)
     {
         _userManager = userManager;
         _configuration = configuration;
@@ -32,7 +32,6 @@ public class AuthManager : IAuthManager
         var expiration = DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("lifetime").Value));
 
         var token = new JwtSecurityToken(
-            issuer : jwtSettings.GetSection("Issurer").Value,
             claims: claims,
             expires: expiration,
             signingCredentials: signingCredentials
@@ -59,7 +58,7 @@ public class AuthManager : IAuthManager
 
     private SigningCredentials GetSigningCredentials()
     {
-        var key = Environment.GetEnvironmentVariable("KEY");
+        var key = _configuration.GetSection("JWT:Key").Value;
 
         var secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 

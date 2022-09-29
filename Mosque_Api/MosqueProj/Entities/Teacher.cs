@@ -6,23 +6,26 @@ namespace MosqueProj.Entities
 {
     public class Teacher
     {
-            public int Id { get; set; }
-           
-            public string First_Name { get; set; }
-            public string Last_Name { get; set; }
-            public string Email { get; set; }
-            public string Password { get; set; }
-            public string Phone { get; set; }
-            public int? CountOfAbsenceDay { get; set; }
+        public int Id { get; set; }
+        [Required]
+        public string FirstName { get; set; }
+        [Required]
+        public string LastName { get; set; }
+        [Required]
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        [Required]
+        public short Age { get; set; }
+        [Required]
+        public string Password { get; set; }
+        public string PhoneNumber { get; set; }
+        public int? AttendanceDays { get; set; }
+        public int SubjectId { get; set; }
 
-            #region Relations
-            public virtual Group Groups { get; set; }
-            public int SubjectId { get; set; }
-            [ForeignKey("SubjectId")]
-            public Subject Subjects { get; set; }
 
-            public ICollection<Year> Years { get; set; }
-        #endregion
+        //Navigations Properties
+        public virtual Subject Subjects { get; set; }
 
+        public virtual List<Group_Teacher> Groups_Teachers { get; set; }
     }
 }

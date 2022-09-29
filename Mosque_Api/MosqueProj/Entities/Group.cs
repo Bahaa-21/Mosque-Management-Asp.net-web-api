@@ -1,22 +1,28 @@
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace MosqueProj.Entities
 {
     public class Group
     {
         public int Id { get; set; }
+        [Required]
+
         public string NameGroup { get; set; }
+        [Required]
+
         public short Min_Old { get; set; }
+        [Required]
+
         public short Max_Old { get; set; }
 
-        public int? YearId { get; set; }
+        public int YearId { get; set; }
         public int TeacherId { get; set; }
-        [ForeignKey("TeacherId")]
-        public virtual Teacher Teachers { get; set; }
 
-        public virtual IList<Student> Students { get; set; }
+
+        //Navigations Properties
+        public virtual Year Years { get; set; }
+
+        public virtual List<Student> Students { get; set; }
+
+        public virtual List<Group_Teacher> Groups_Teachers { get; set; }
 
     }
 }

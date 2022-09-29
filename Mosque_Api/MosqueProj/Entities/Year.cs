@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
-
 namespace MosqueProj.Entities
 {
     public class Year
     {
         public int Id { get; set; }
-        public DateTime YearDate { get; set; }
+        public DateTime StartCourse { get; set; }
+        public DateTime EndCourse { get; set; }
 
-        public virtual IList<Group> Groups { get; set; }
-
-        public ICollection<Teacher> Teachers { get; set; }
+        //Navigations Properties
+        public virtual List<Group> Groups { get; set; }
     }
 }

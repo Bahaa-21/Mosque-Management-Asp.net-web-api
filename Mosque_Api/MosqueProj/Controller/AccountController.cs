@@ -4,13 +4,13 @@
 [ApiController]
 public class AccountController : ControllerBase
 {
-    private readonly UserManager<ApiUsers> _userManager;
+    private readonly UserManager<Users> _userManager;
     private readonly IMapper _mapper;
     private readonly IAuthManager _authManager;
 
 
 
-    public AccountController(UserManager<ApiUsers> userManager, IMapper mapper, IAuthManager authManager) =>
+    public AccountController(UserManager<Users> userManager, IMapper mapper, IAuthManager authManager) =>
 
         (_userManager, _mapper, _authManager) = (userManager, mapper, authManager);
 
@@ -30,7 +30,7 @@ public class AccountController : ControllerBase
         if (await _userManager.FindByEmailAsync(userDOT.Email) is not null)
             return BadRequest();
 
-        var user = _mapper.Map<ApiUsers>(userDOT);
+        var user = _mapper.Map<Users>(userDOT);
 
         user.UserName = userDOT.Email;
 
@@ -54,7 +54,7 @@ public class AccountController : ControllerBase
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> Login([FromBody] LoingUserDTO loingUser)
+    public async Task<ActionResult<string>> Login([FromBody] LoingUserDTO loingUser)
     {
         if (!ModelState.IsValid)
         {

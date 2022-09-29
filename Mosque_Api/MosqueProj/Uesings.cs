@@ -11,4 +11,5 @@ global using MosqueProj.Entities;
 global using System;
 global using Microsoft.AspNetCore.Identity;
 global using MosqueProj.Services;
-
+global using System.ComponentModel.DataAnnotations;
+global using System.ComponentModel.DataAnnotations.Schema;

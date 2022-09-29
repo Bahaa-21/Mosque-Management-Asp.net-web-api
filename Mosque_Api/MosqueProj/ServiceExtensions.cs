@@ -13,7 +13,7 @@ public static class ServiceExtensions
 {
     public static void ConfigureIdentity(this IServiceCollection services)
     {
-        var builder = services.AddIdentityCore<ApiUsers>(q =>
+        var builder = services.AddIdentityCore<Users>(q =>
             { 
             q.User.RequireUniqueEmail = true ;
             q.Password.RequiredUniqueChars = 1 ;
@@ -28,7 +28,7 @@ public static class ServiceExtensions
     {
         var jwtSettings = configuration.GetSection("JWT");
 
-        var key = Environment.GetEnvironmentVariable("KEY");
+        var key = configuration.GetSection("JWT:Key").Value;
 
         services.AddAuthentication(o =>
         {

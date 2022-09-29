@@ -35,7 +35,7 @@ public class GroupsController : ControllerBase
     public async Task<IActionResult> GetGroup(int id)
     {
 
-        var group = await _unitOfWork.Groups.Get(g => g.Id == id, new[] { "Students" });
+        var group = await _unitOfWork.Groups.Get(g => g.Id == id, new[] { "Teachers" });
         var result = _mapper.Map<GroupDTO>(group);
         return Ok(group);
     }

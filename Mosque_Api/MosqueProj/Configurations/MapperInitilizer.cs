@@ -21,8 +21,8 @@ public class MapperInitilizer : Profile
         CreateMap<Subject, SubjectDTO>().ReverseMap();
         CreateMap<Subject, CreateSubjectDTO>().ReverseMap();
 
-        CreateMap<ApiUsers ,UserDTO>().ReverseMap();
-        CreateMap<ApiUsers,LoingUserDTO>().ReverseMap();
+        CreateMap<Users ,UserDTO>().ReverseMap();
+        CreateMap<Users,LoingUserDTO>().ReverseMap();
 
     }
 }

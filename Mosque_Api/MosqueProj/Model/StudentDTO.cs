@@ -12,15 +12,15 @@ namespace MosqueProj.Model
     {
         [Required, MaxLength(30)]
 
-        public string First_Name { get; set; }
+        public string FirstName { get; set; }
         [Required, MaxLength(30)]
 
-        public string Last_Name { get; set; }
+        public string LastName { get; set; }
         [Required, MaxLength(25)]
 
-        public string Father_Name { get; set; }
+        public string FatherName { get; set; }
 
-        public string Full_Name { get; set; }
+        public string FullName { get; set; }
 
         public  string PhoneNumber {get; set;}
         [Required]

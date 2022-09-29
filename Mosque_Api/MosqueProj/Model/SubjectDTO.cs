@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MosqueProj.Model
 {
-    public class SubjectDTO : CreateSubjectDTO 
+    public class SubjectDTO : CreateSubjectDTO
     {
         public int Id { get; set; }
 
-        public List<TeacherDTO> Teachers { get; set; }
+        public List<Teacher> Teachers { get; set; }            
+
     }
     public class CreateSubjectDTO
     {

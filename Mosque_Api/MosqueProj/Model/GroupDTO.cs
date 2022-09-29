@@ -26,7 +26,7 @@ namespace MosqueProj.Model
     {
         [Required]
         public int Id { get; set; }
-        public IList<StudentDTO> Students { get; set; }
+        public List<StudentDTO> Students { get; set; }
         public TeacherDTO Teachers { get; set; }
     }
 }

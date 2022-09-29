@@ -6,7 +6,9 @@ namespace MosqueProj.Entities
     public class Subject
     {
         public int Id { get; set; }
-        public string Name_Subject { get; set; }
-        public List<Teacher> Teachers { get; set; }
+        [Required]
+        public string NameSubject { get; set; }
+
+        public virtual List<Teacher> Teachers { get; set; }
     }
 }
