@@ -13,7 +13,8 @@ public interface IGenericRepository<T>  where T : class
 
     Task<T> Get(Expression<Func<T, bool>> expression = null,
        string[] includes = null);
-       
+
+    Task<T> Select(Expression<Func<T, bool>> expression = null, Expression<Func<T, T>> selesction = null);
     Task Insert(T entity);
 
     Task InsertRange(IEnumerable<T> entities);

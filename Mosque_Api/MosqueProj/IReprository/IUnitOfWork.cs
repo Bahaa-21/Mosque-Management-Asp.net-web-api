@@ -3,7 +3,8 @@
 public interface IUnitOfWork : IDisposable
 {
     IGenericRepository<Year> Years { get; }
-    IGenericRepository<Group> Groups { get; }
+    IGroupRepo Groups { get; }
+    IGenericRepository<Group_Teacher> GroupsTeachers { get; }
     IGenericRepository<Teacher> Teachers { get; }
     IGenericRepository<Student> Students { get; }
     IGenericRepository<Subject> Subjects { get; }

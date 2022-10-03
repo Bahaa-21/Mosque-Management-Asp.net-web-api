@@ -33,7 +33,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         {
             foreach (var item in includes)
             {
-                query=query.Include(item);
+                query= query.Include(item);
             }
         }
         return await query.AsNoTracking().FirstOrDefaultAsync(expression);
@@ -81,7 +81,15 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
     public async Task Insert(T entity) => await _db.AddAsync(entity);
 
     public async Task InsertRange(IEnumerable<T> entities) => await _db.AddRangeAsync(entities);
-    
+
+    public async Task<T> Select(Expression<Func<T, bool>> expression = null, Expression<Func<T, T>> selesction = null)
+    {
+        IQueryable<T> query = _db;
+        if(expression != null)
+        query = query.Select(selesction);
+
+        return await query.AsNoTracking().FirstOrDefaultAsync(expression);
+    }
 
     public void Update(T entity)
     {

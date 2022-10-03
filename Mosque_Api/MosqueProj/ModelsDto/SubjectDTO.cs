@@ -6,7 +6,7 @@ namespace MosqueProj.Model
     {
         public int Id { get; set; }
 
-        public List<Teacher> Teachers { get; set; }            
+        public List<TeacherDTO> Teachers { get; set; }            
 
     }
     public class CreateSubjectDTO

@@ -10,11 +10,9 @@ namespace MosqueProj.Entities
 
         public short Min_Old { get; set; }
         [Required]
-
         public short Max_Old { get; set; }
 
-        public int YearId { get; set; }
-        public int TeacherId { get; set; }
+        public int YearId { get; set; } 
 
 
         //Navigations Properties

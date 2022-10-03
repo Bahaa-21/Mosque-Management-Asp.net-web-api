@@ -35,8 +35,8 @@ public class SubjectsController : ControllerBase
             return BadRequest();
 
 
-        var subject =_mapper.Map<IList<Subject>>(subjectDTO);
-        await _unitOfWork.Subjects.InsertRange(subject);
+        var subjects =_mapper.Map<IList<Subject>>(subjectDTO);
+        await _unitOfWork.Subjects.InsertRange(subjects);
         await _unitOfWork.Save();
 
         return Ok();

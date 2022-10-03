@@ -7,42 +7,45 @@ namespace MosqueProj.Data;
 public class MosqueDbContext : IdentityDbContext<Users>
 {
     public MosqueDbContext(DbContextOptions option) : base(option) { }
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(modelBuilder);
+        base.OnModelCreating(builder);
 
         #region Relationships
-        modelBuilder.Entity<Year>()
+        builder.Entity<Year>()
             .HasMany(g => g.Groups)
             .WithOne(y => y.Years)
             .HasForeignKey(f => f.YearId);
 
-        modelBuilder.Entity<Group>()
+        builder.Entity<Group>()
             .HasMany(s => s.Students)
             .WithOne(g => g.Groups)
             .HasForeignKey(f => f.GroupId);
 
-        modelBuilder.Entity<Subject>()
+        builder.Entity<Subject>()
             .HasMany(t => t.Teachers)
             .WithOne(s => s.Subjects)
             .HasForeignKey(f => f.SubjectId);
 
         //Many-To-Many Relationship
-        modelBuilder.Entity<Group_Teacher>().HasKey(sc => new { sc.TeacherId, sc.GroupId });
+        builder.Entity<Group_Teacher>().HasKey(sc => new { sc.TeacherId, sc.GroupId });
 
-        modelBuilder.Entity<Group_Teacher>()
+        builder.Entity<Group_Teacher>()
             .HasOne(t => t.Teachers)
             .WithMany(g => g.Groups_Teachers)
             .HasForeignKey(f => f.TeacherId);
-        
-        modelBuilder.Entity<Group_Teacher>()
+
+        builder.Entity<Group_Teacher>()
             .HasOne(t => t.Groups)
             .WithMany(g => g.Groups_Teachers)
             .HasForeignKey(f => f.GroupId);
         #endregion
 
-        modelBuilder.Entity<Student>().Property(p => p.FullName).HasComputedColumnSql("[FirstName] + ' ' + [FatherName] + ' ' + [LastName]");
-        modelBuilder.ApplyConfiguration(new RoleConfiguration());
+        builder.Entity<Student>().Property(p => p.FullName).HasComputedColumnSql("[FirstName] + ' ' + [FatherName] + ' ' + [LastName]");
+        builder.Entity<Teacher>().Property(p => p.FullName).HasComputedColumnSql("[FirstName] + ' ' + [LastName]");
+
+
+        builder.ApplyConfiguration(new RoleConfiguration());
 
 
     }

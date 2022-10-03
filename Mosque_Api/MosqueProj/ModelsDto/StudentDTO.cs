@@ -5,8 +5,6 @@ namespace MosqueProj.Model
     public class StudentDTO : CreateStudentDTO
     {
         public int Id { get; set; } 
-
-        public GroupDTO Groups { get; set; }
     } 
     public class CreateStudentDTO
     {

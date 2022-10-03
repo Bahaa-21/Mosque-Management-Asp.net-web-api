@@ -10,6 +10,7 @@ public class MapperInitilizer : Profile
         CreateMap<Group , GroupDTO>().ReverseMap();
         CreateMap<Group , CreateGroupDTOS>().ReverseMap();
         CreateMap<Group , UpdateGroupDTOS>().ReverseMap();
+        CreateMap<Group_Teacher , GroupTeachersDTO>().ReverseMap();
 
 
         CreateMap<Teacher , TeacherDTO>().ReverseMap();
