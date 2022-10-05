@@ -75,47 +75,48 @@ public class GroupsController : ControllerBase
     }
 
     // //[Authorize(Roles = "Adminsitrator")]
-    // [HttpPut("{id:int}")]
-    // [ProducesResponseType(StatusCodes.Status204NoContent)]
-    // [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    // public async Task<IActionResult> UpdateGroup(int id, [FromBody] UpdateGroupDTOS GroupDTOS)
-    // {
-    //     if (!ModelState.IsValid || id < 1)
-    //     {
-    //         return BadRequest($"Submitted data is invalid {ModelState}");
-    //     }
-    //     var group = await _unitOfWork.Groups.Get(g => g.Id == id);
-    //     if (group is null)
-    //     {
-    //         return BadRequest("Submitted data is invalid");
-    //     }
+    [HttpPut("update-group/{id:int}")]
+    
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> UpdateGroup(int id, [FromBody] UpdateGroupDTOS GroupDTOS)
+    {
+        if (!ModelState.IsValid || id < 1)
+        {
+            return BadRequest($"Submitted data is invalid {ModelState}");
+        }
+        var group = await _unitOfWork.Groups.Get(g => g.Id == id);
+        if (group is null)
+        {
+            return BadRequest("Submitted data is invalid");
+        }
 
-    //     _mapper.Map(GroupDTOS, group);
-    //     _unitOfWork.Groups.Update(group);
-    //     await _unitOfWork.Save();
-    //     return NoContent();
+        _mapper.Map(GroupDTOS, group);
+        _unitOfWork.Groups.Update(group);
+        await _unitOfWork.Save();
+        return NoContent();
 
-    // }
+    }
 
-    // [HttpDelete("{id:int}")]
-    // [ProducesResponseType(StatusCodes.Status204NoContent)]
-    // [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    // [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-    // public async Task<IActionResult> DeleteGroup(int id)
-    // {
-    //     if (id < 1)
-    //     {
-    //         return BadRequest();
-    //     }
-    //     var group = await _unitOfWork.Groups.Get(g => g.Id == id);
-    //     if (group is null)
-    //     {
-    //         return BadRequest();
-    //     }
-    //     await _unitOfWork.Groups.Delete(id);
-    //     await _unitOfWork.Save();
-    //     return NoContent();
-    // }
+    [HttpDelete("delete-group/{id:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> DeleteGroup(int id)
+    {
+        if (id < 1)
+        {
+            return BadRequest();
+        }
+        var group = await _unitOfWork.Groups.Get(g => g.Id == id);
+        if (group is null)
+        {
+            return BadRequest();
+        }
+        await _unitOfWork.Groups.Delete(id);
+        await _unitOfWork.Save();
+        return NoContent();
+    }
 }
 

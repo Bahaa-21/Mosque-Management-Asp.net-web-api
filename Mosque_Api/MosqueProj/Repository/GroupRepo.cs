@@ -11,9 +11,7 @@ namespace MosqueProj.Repository
         {
         }
 
-        public async Task<GroupTeachersDTO> GetGroupWithTeachers(int id)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<GroupTeachersDTO> GetGroupWithTeachers(int id) =>
+        throw new NullReferenceException();
     }
 }

@@ -12,7 +12,7 @@
         [Required]
 
         public short Max_Old { get; set; }
-
+        [Required]
         public int YearId { get; set; }
     }
 
@@ -22,7 +22,6 @@
     public class GroupDTO : CreateGroupDTOS
     {
         public  List<StudentDTO> Students { get; set; }
-        public List<GroupTeachersDTO> Groups_Teachers { get; set; }
     }
 
 
@@ -31,7 +30,7 @@
         public int GroupId { get; set; }
         public GroupDTO Groups { get; set; }
         public int TeacherId { get; set; }
-        public TeacherDTO Teachers { get; set; }
+        public TeacherDTO  Teachers { get; set; }
 
     }
 }
