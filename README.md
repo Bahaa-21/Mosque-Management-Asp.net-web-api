@@ -1,2 +1,3 @@
-# Mosque-Project
-Project for the management of mosque students
+# Mosque-Management
+
+## A Project for the management of mosque students
