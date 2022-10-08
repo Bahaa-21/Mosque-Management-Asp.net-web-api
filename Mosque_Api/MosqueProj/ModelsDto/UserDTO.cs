@@ -24,4 +24,6 @@ namespace MosqueProj.Model
         public ICollection<string> Roles { get; set; }
     }
 
+    
+   
 }

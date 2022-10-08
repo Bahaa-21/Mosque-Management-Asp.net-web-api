@@ -11,6 +11,7 @@ public class UnitOfWork : IUnitOfWork
     private IGenericRepository<Subject> _subjects;
     private IGenericRepository<Year> _years;
     private IGenericRepository<Group_Teacher> _groupTeachers;
+    private IGenericRepository<Users> _user;
 
 
     public UnitOfWork(MosqueDbContext context)
@@ -27,6 +28,7 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<Student> Students => _students ??= new GenericRepository<Student>(_context);
 
     public IGenericRepository<Subject> Subjects => _subjects ??= new GenericRepository<Subject>(_context);
+    public IGenericRepository<Users> Users => _user ??= new GenericRepository<Users>(_context);
     public void Dispose()
     {
         _context.Dispose();

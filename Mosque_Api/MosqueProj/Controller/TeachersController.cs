@@ -21,9 +21,7 @@ namespace MosqueProj.Controller
         {
             var teachers = await _unitOfWork.Teachers.GetAll(requestParams, new[]{"Subjects"});
 
-            var results = _mapper.Map<IList<TeacherDTO>>(teachers);
-
-            return Ok(results);
+            return Ok(_mapper.Map<IList<TeacherDTO>>(teachers));
         }
 
         [HttpGet("get-teacher-by-id/{id}", Name ="GetTeacher")]
@@ -34,9 +32,7 @@ namespace MosqueProj.Controller
         {
             var teachers = await _unitOfWork.Teachers.Get(te => te.Id==id , new[] {"Subjects"});
 
-            var results = _mapper.Map<TeacherDTO>(teachers);
-
-            return Ok(results);
+            return Ok(_mapper.Map<TeacherDTO>(teachers));
         }
         
         [HttpGet("get-teacher-with-groups-by-id/{id}")]
@@ -47,9 +43,7 @@ namespace MosqueProj.Controller
         {
             var teachers = await _unitOfWork.GroupsTeachers.Get(te => te.TeacherId==id , new[] {"Teachers" ,"Groups"});
 
-            var results = _mapper.Map<GroupTeachersDTO>(teachers);
-
-            return Ok(results);
+            return Ok(_mapper.Map<GroupTeachersDTO>(teachers));
         }
 
 

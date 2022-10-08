@@ -23,9 +23,7 @@ public class AccountController : ControllerBase
     public async Task<IActionResult> Register([FromBody] UserDTO userDOT)
     {
         if (!ModelState.IsValid)
-        {
             return BadRequest(ModelState);
-        }
 
         if (await _userManager.FindByEmailAsync(userDOT.Email) is not null)
             return BadRequest();
@@ -51,9 +49,6 @@ public class AccountController : ControllerBase
 
     [HttpPost]
     [Route("login")]
-    [ProducesResponseType(StatusCodes.Status202Accepted)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<string>> Login([FromBody] LoingUserDTO loingUser)
     {
         if (!ModelState.IsValid)
@@ -64,7 +59,8 @@ public class AccountController : ControllerBase
         {
             return Unauthorized();
         }
+        var token = _authManager.CreateToken();
 
-        return Ok(new { token = _authManager.CreateToken() });
+        return Ok(token);
     }
 }

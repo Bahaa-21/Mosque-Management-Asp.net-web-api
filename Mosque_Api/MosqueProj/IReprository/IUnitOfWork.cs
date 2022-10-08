@@ -8,6 +8,7 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<Teacher> Teachers { get; }
     IGenericRepository<Student> Students { get; }
     IGenericRepository<Subject> Subjects { get; }
+    IGenericRepository<Users> Users { get; }
 
     Task Save();
 }

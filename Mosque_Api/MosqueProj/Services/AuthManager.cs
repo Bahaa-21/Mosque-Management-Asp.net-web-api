@@ -23,6 +23,7 @@ public class AuthManager : IAuthManager
         var signingCredentials = GetSigningCredentials();
         var claims = await GetClaims();
         var token = GenerateTokenOptions(signingCredentials, claims);
+
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
@@ -67,7 +68,7 @@ public class AuthManager : IAuthManager
 
     public async Task<bool> ValidateUser(LoingUserDTO userDTO)
     {
-        _user = await _userManager.FindByNameAsync(userDTO.Email);
+        _user = await _userManager.FindByEmailAsync(userDTO.Email);
 
         return (_user != null && await _userManager.CheckPasswordAsync(_user, userDTO.Password));
     }

@@ -8,11 +8,8 @@ public class GroupsController : ControllerBase
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public GroupsController(IUnitOfWork unitOfWork, IMapper mapper)
-    {
-        _unitOfWork = unitOfWork;
-        _mapper = mapper;
-    }
+    public GroupsController(IUnitOfWork unitOfWork, IMapper mapper) => (_unitOfWork, _mapper) = (unitOfWork, mapper);
+
 
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
@@ -36,8 +33,8 @@ public class GroupsController : ControllerBase
     {
 
         var group = await _unitOfWork.Groups.Get(g => g.Id == id , new[] {"Students"});
-        var result = _mapper.Map<GroupDTO>(group);
-        return Ok(result);
+       
+        return Ok(_mapper.Map<GroupDTO>(group));
     }
 
 
@@ -49,8 +46,8 @@ public class GroupsController : ControllerBase
     {
 
         var group = await _unitOfWork.GroupsTeachers.Get(g => g.GroupId == id , new[] {"Groups" , "Teachers"});
-        var result = _mapper.Map<GroupTeachersDTO>(group);
-        return Ok(result);
+
+        return Ok(_mapper.Map<GroupTeachersDTO>(group));
     }
 
     //[Authorize(Roles = "Adminsitrator")]
